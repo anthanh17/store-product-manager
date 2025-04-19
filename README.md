@@ -93,6 +93,8 @@ Benefits of using REST Client:
 
 ## Database Schema
 
+![Database Schema](./docs/online_store_product_management_system.png)
+
 ### Users
 
 ```sql
