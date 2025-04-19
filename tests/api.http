@@ -7,10 +7,10 @@ POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "testuser2drrr3",
+  "username": "testuser2drarr3",
   "password": "passworrrrd123",
   "full_name": "Test User",
-  "email": "tesd1dss3@example.com"
+  "email": "tesd1dsas3@example.com"
 }
 
 ### Login User

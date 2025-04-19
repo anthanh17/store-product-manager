@@ -1,8 +1,10 @@
 package configs
 
 import (
+	"errors"
 	"time"
 
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
@@ -53,10 +55,18 @@ type Log struct {
 }
 
 func LoadConfig() (config Config, err error) {
-	viper.AddConfigPath("./configs")
-	viper.SetConfigName("local")
-	viper.SetConfigType("yaml")
+	// Define the flag
+	configFileFlag := pflag.StringP("config", "f", "", "Path to the configuration file")
+	// Parse the flags
+	pflag.Parse()
 
+	// Check if the flag was provided
+	if *configFileFlag == "" {
+		err = errors.New("flag empty")
+		return
+	}
+
+	viper.SetConfigFile(*configFileFlag)
 	err = viper.ReadInConfig()
 	if err != nil {
 		return

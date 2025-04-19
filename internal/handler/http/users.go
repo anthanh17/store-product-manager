@@ -46,7 +46,7 @@ func (s *Server) createUser(ctx *gin.Context) {
 
 	hashedPassword, err := utils.HashPassword(req.Password)
 	if err != nil {
-		s.logger.Info("cannot hashedPassword")
+		s.logger.Sugar().Infof("\ncannot hashedPassword: %v\n", err)
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
@@ -61,7 +61,7 @@ func (s *Server) createUser(ctx *gin.Context) {
 
 	user, err := s.store.CreateUser(ctx, arg)
 	if err != nil {
-		s.logger.Info("cannot CreateUser")
+		s.logger.Sugar().Infof("\ncannot CreateUser: %v\n", err)
 		if db.ErrorCode(err) == db.UniqueViolation {
 			ctx.JSON(http.StatusForbidden, errorResponse(err))
 			return

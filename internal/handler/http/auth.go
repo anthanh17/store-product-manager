@@ -37,7 +37,7 @@ func (s *Server) loginUser(ctx *gin.Context) {
 
 	user, err := s.store.GetUser(ctx, req.Username)
 	if err != nil {
-		s.logger.Info("cannot GetUser")
+		s.logger.Sugar().Infof("\ncannot GetUser: %v\n", err)
 		if errors.Is(err, db.ErrRecordNotFound) {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
@@ -48,7 +48,7 @@ func (s *Server) loginUser(ctx *gin.Context) {
 
 	err = utils.CheckPassword(req.Password, user.HashedPassword)
 	if err != nil {
-		s.logger.Info("cannot CheckPassword")
+		s.logger.Sugar().Infof("\ncannot CheckPassword: %v\n", err)
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}

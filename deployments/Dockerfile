@@ -1,18 +1,34 @@
 # Build stage
-FROM golang:1.21-alpine3.18 AS builder
+FROM golang:1.23-alpine AS builder
+
 WORKDIR /app
+
+# Copy go mod and sum files
+COPY go.mod go.sum ./
+
+# Download all dependencies
+RUN go mod download
+
+# Copy the source code
 COPY . .
-RUN go build -o main main.go
+
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/main.go
 
 # Run stage
 FROM alpine:3.18
-WORKDIR /app
-COPY --from=builder /app/main .
-COPY app.env .
-COPY start.sh .
-COPY wait-for.sh .
-COPY db/migration ./db/migration
 
-EXPOSE 8080 9090
-CMD [ "/app/main" ]
-ENTRYPOINT [ "/app/start.sh" ]
+WORKDIR /app
+
+# Install necessary packages
+RUN apk --no-cache add ca-certificates tzdata
+
+# Copy the binary from builder
+COPY --from=builder /app/main .
+COPY --from=builder /app/configs ./configs
+
+# Expose the application port
+EXPOSE 8081
+
+# Command to run the application
+CMD ["/app/main", "--config", "configs/docker.yaml"]

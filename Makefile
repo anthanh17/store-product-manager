@@ -29,6 +29,6 @@ sqlc:
 
 # Start server http
 server:
-	go run cmd/main.go
+	go run cmd/main.go -f ./configs/local.yaml
 
 .PHONY: databaseup databasedown migrateup migratedown migrateup1 migratedown1 sqlc server
