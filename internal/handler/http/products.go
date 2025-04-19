@@ -8,7 +8,6 @@ import (
 	db "store-product-manager/internal/dataaccess/database/sqlc"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type ProductStatus string
@@ -177,7 +176,7 @@ func (s *Server) updateProduct(ctx *gin.Context) {
 		return
 	}
 
-	// Kiểm tra xem sản phẩm có tồn tại không
+	// check product exits
 	_, err := s.store.GetProduct(ctx, reqURI.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -188,64 +187,46 @@ func (s *Server) updateProduct(ctx *gin.Context) {
 		return
 	}
 
-	// Cập nhật thông tin sản phẩm
-	arg := db.UpdateProductParams{
+	// Call transaction update product
+	arg := db.UpdateProductTxParams{
 		ID:            reqURI.ID,
 		Name:          req.Name,
-		Description:   pgtype.Text{String: req.Description, Valid: true},
+		Description:   req.Description,
 		Price:         req.Price,
 		StockQuantity: req.StockQuantity,
 		Status:        req.Status,
-		ImageUrl:      pgtype.Text{String: req.ImageUrl, Valid: req.ImageUrl != ""},
+		ImageURL:      req.ImageUrl,
+		CategoryIDs:   req.CategoryIds,
 	}
 
-	product, err := s.store.UpdateProduct(ctx, arg)
+	product, err := s.store.UpdateProductTx(ctx, arg)
 	if err != nil {
+		s.logger.Info("cannot update product")
+		if db.ErrorCode(err) == db.UniqueViolation {
+			ctx.JSON(http.StatusForbidden, errorResponse(err))
+			return
+		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	// Cập nhật danh mục sản phẩm nếu có
-	if len(req.CategoryIds) > 0 {
-		// Xóa tất cả danh mục hiện tại của sản phẩm
-		err = s.store.DeleteProductCategories(ctx, reqURI.ID)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-			return
-		}
-
-		// Thêm danh mục mới
-		for _, categoryID := range req.CategoryIds {
-			err = s.store.AddProductCategory(ctx, db.AddProductCategoryParams{
-				ProductID:  reqURI.ID,
-				CategoryID: categoryID,
-			})
-			if err != nil {
-				ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-				return
-			}
-		}
-	}
-
-	// Lấy danh mục của sản phẩm sau khi cập nhật
 	categories, err := s.store.GetProductCategories(ctx, reqURI.ID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	// Chuẩn bị dữ liệu trả về
 	response := gin.H{
 		"status":  "success",
 		"message": "Product updated successfully",
 		"data": gin.H{
 			"id":             product.ID,
 			"name":           product.Name,
-			"description":    product.Description.String,
+			"description":    product.Description,
 			"price":          product.Price,
 			"stock_quantity": product.StockQuantity,
 			"status":         product.Status,
-			"image_url":      product.ImageUrl.String,
+			"image_url":      product.ImageUrl,
 			"categories":     categories,
 			"updated_at":     product.UpdatedAt,
 		},

@@ -16,6 +16,7 @@ type Store interface {
 
 	// Expand more transactions in the future
 	CreateProductTx(ctx context.Context, arg CreateProductTxParams) (CreateProductTxResult, error)
+	UpdateProductTx(ctx context.Context, arg UpdateProductTxParams) (UpdateProductTxResult, error)
 }
 
 // SQLStore provides all functions to execute SQL queries and transactions

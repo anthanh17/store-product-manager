@@ -1,6 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:8081
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjczMDg1ZTlhLTg4NWEtNDE3My05MDA1LTI1MTliYTY1NmE3NiIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTc6Mjc6MDguMjA1NTk1KzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMTlUMTc6NDI6MDguMjA1NTk2KzA3OjAwIn0.jxd26rkUGfZ8uUWd1Gz72KlBzH1tTM1Y8Wa7qmBSLlM
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUxODI4ODExLTc0NzMtNGQyZi1iZWE3LTUxNjY2ZWJlMzQyMCIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTc6NTM6MjIuODc3NjkrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNS0wNC0xOVQxODowODoyMi44Nzc2OSswNzowMCJ9.3ZgW-3S3_2wBisXGJXtZONGNPfw4v_GZNKIh1WVfmm0
 
 ### Create User
 POST {{baseUrl}}/api/auth/register
@@ -62,12 +62,12 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "name": "Updated Product",
-  "description": "This is an updated product description",
-  "price": 149.99,
-  "stock_quantity": 75,
+  "name": "Updated Product 2",
+  "description": "This is an updated product description 22222",
+  "price": 22.22,
+  "stock_quantity": 22,
   "status": "IN_STOCK",
-  "image_url": "https://example.com/updated-product.jpg",
+  "image_url": "https://example.com/updated-product.jpg 22",
   "category_ids": [2]
 }
 
