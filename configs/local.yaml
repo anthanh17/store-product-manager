@@ -3,14 +3,14 @@ token:
   refreshTokenDuration: 24h
   tokenSymmetricKey: 12345678901234567890123456789012 # 32 byte
 database:
-  host: 127.0.0.1
+  host: postgres
   port: 5432
   username: root
   password: secret
   database: bfast
 cache:
   type: redis
-  host: 127.0.0.1
+  host: redis
   port: 6379
   username:
   password:

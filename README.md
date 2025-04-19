@@ -16,7 +16,7 @@ The Online Store Product Management System is a RESTful API built to manage prod
 - Container: Docker
 - API Documentation: Swagger
 - Caching: Redis
-- Tools: Makefile
+- Tools: Makefile, golang-migrate
 - Tests: REST Client for Visual Studio Code - test api
   > I have written all the sample runs in file ./test/api.http
 
@@ -37,22 +37,10 @@ The Online Store Product Management System is a RESTful API built to manage prod
    cd store-product-manager
    ```
 
-2. Setup project:
+2. Start system:
 
    ```bash
-   make databaseup
-   ```
-
-3. Migrate database:
-
-   ```bash
-   make migrateup
-   ```
-
-4. Run server:
-
-   ```bash
-   make server
+   make systemup
    ```
 
 ## Tests

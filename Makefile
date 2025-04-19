@@ -1,10 +1,10 @@
 HOST = localhost
 
 # ----------------------------- Setup database ---------------------------------
-databaseup:
+systemup:
 	docker compose -f deployments/docker-compose.yaml up -d
 
-databasedown:
+systemdown:
 	docker compose -f deployments/docker-compose.yaml down
 
 # ------------------- Read schema sql -> crete or update database --------------
