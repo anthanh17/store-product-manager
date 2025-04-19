@@ -4,6 +4,8 @@
 
 The Online Store Product Management System is a RESTful API built to manage products in an online store. The system allows users to perform CRUD (Create, Read, Update, Delete) operations on products, manage categories, reviews, and wishlists.
 
+> **Note:** This project was developed as part of an 8-hour coding challenge to build an entire system from design to implementation. Due to the time constraints, not all API endpoints are fully implemented, and there may be some limitations. The challenge of building a complete system in such a short timeframe was an exciting exercise in prioritization and efficient development.
+
 ## Features
 
 - Authentication System
