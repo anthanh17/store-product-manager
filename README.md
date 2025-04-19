@@ -38,7 +38,31 @@ The Online Store Product Management System is a RESTful API built to manage prod
 - Caching: Redis
 - Tools: Makefile, golang-migrate
 - Tests: REST Client for Visual Studio Code - test api
-  > I have written all the sample runs in file ./test/api.http
+
+## `I have written all the sample runs in file ./tests/api.http`
+
+### Testing API with REST Client
+
+For easy API testing, we recommend installing the REST Client extension for Visual Studio Code:
+
+1. Open Visual Studio Code
+2. Go to Extensions (Ctrl+Shift+X or Cmd+Shift+X on Mac)
+3. Search for "REST Client" by Huachao Mao
+4. Click Install
+
+After installation, you can use the test files in the `/tests/api.http` directory:
+
+- Simply open any `.http` file
+- Click the "Send Request" link that appears above each request
+- View the response directly in VS Code
+
+Benefits of using REST Client:
+
+- Test API endpoints without leaving your editor
+- Save and version control your API tests alongside code
+- Share request collections with your team
+- Environment variables support for different configurations
+- Response syntax highlighting and formatting
 
 ## Setup Guide
 
