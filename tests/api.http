@@ -1,6 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:8081
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljZWEwZjg2LTYyNzQtNDcyNS1hYjYyLWJjNDAyMTU1ODk2MiIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTg6NDQ6NTUuNTg0Nzc5KzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMTlUMTg6NTk6NTUuNTg0Nzc5KzA3OjAwIn0.OnN9uM19h6WJ4xENLkoZDfSpjZ9W_Onuad2dWMS5IZw
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk5ZTc0YjE1LTU2NDMtNDg5ZS04NTdjLTIxNjBiYTg2NzFlNiIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTk6MDI6MjUuNTQ2MTQrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNS0wNC0xOVQxOToxNzoyNS41NDYxNDErMDc6MDAifQ.zbgj6nQN3DCD1EC443rzAcxsLq9hWKnuD-vLJ40KOH4
 
 ### Create User
 POST {{baseUrl}}/api/auth/register
@@ -93,14 +93,6 @@ Authorization: Bearer {{authToken}}
 GET {{baseUrl}}/api/products?page=1&limit=10&status=IN_STOCK&search_product_name=an
 Authorization: Bearer {{authToken}}
 
-
-
-
-
-
-
-
-
 # -------------------------------- CATEGORY ------------------------------------
 
 ### Create Category
@@ -133,4 +125,10 @@ Content-Type: application/json
 
 ### Delete Category
 DELETE {{baseUrl}}/api/categories/2
+Authorization: Bearer {{authToken}}
+
+### ========================== Dashboard ====================================
+
+### Get Dashboard Summary
+GET {{baseUrl}}/api/dashboard/summary
 Authorization: Bearer {{authToken}}

@@ -147,6 +147,108 @@
   }
   ```
 
+#### Get Product List (Paginated)
+
+- **Endpoint**: `GET /api/products`
+- **Description**: Get a paginated list of products with filtering
+- **Query Parameters**:
+  - `page`: Page number (default: 1)
+  - `limit`: Number of products per page (default: 10)
+  - `sort`: Field to sort by (default: created_at)
+  - `search_product_name`: Search product name keyword
+  - `category_id`: Filter by category
+  - `price_sort`: sort price (asc/desc, default: desc)
+  - `status`: Product status
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "products": [
+        {
+          "id": 1,
+          "name": "Product A",
+          "description": "Description of Product A",
+          "price": 100000,
+          "stock_quantity": 50,
+          "status": "active",
+          "image_url": "https://example.com/image.jpg",
+          "categories": [
+            {
+              "id": 1,
+              "name": "Category 1"
+            }
+          ],
+          "created_at": "2023-01-01T00:00:00Z",
+          "updated_at": "2023-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": {
+        "total": 100,
+        "page": 1,
+        "limit": 10,
+        "total_pages": 10
+      }
+    }
+  }
+  ```
+
+#### Update Product
+
+- **Endpoint**: `PUT /api/products/{id}`
+- **Description**: Update product information
+- **Request Body**:
+  ```json
+  {
+    "name": "Product B (Updated)",
+    "description": "Updated description of Product B",
+    "price": 160000,
+    "stock_quantity": 25,
+    "status": "active",
+    "image_url": "https://example.com/image2_updated.jpg",
+    "category_ids": [1, 3]
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "message": "Product updated successfully",
+    "data": {
+      "id": 2,
+      "name": "Product B (Updated)",
+      "description": "Updated description of Product B",
+      "price": 160000,
+      "stock_quantity": 25,
+      "status": "active",
+      "image_url": "https://example.com/image2_updated.jpg",
+      "categories": [
+        {
+          "id": 1,
+          "name": "Category 1"
+        },
+        {
+          "id": 3,
+          "name": "Category 3"
+        }
+      ],
+      "updated_at": "2023-01-04T00:00:00Z"
+    }
+  }
+  ```
+
+#### Delete Product
+
+- **Endpoint**: `DELETE /api/products/{id}`
+- **Description**: Delete a product
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "message": "Product deleted successfully"
+  }
+  ```
+
 ### Category Management
 
 #### Create New Category

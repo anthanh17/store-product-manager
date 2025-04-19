@@ -84,6 +84,9 @@ func (server *Server) setupRouter() {
 	authRoutes.PUT("/api/categories/:id", server.updateCategory)
 	authRoutes.DELETE("/api/categories/:id", server.deleteCategory)
 
+	// dashboard api
+	authRoutes.GET("/api/dashboard/summary", server.getDashboardSummary)
+
 	server.router = router
 }
 
