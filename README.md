@@ -13,10 +13,18 @@ The Online Store Product Management System is a RESTful API built to manage prod
   - Access token and refresh token mechanism
   - Token-based authorization for protected routes
 
-- Rate Limiting
+- Rate Limiting - Security: DDOS
+
   - All APIs are protected with rate limiting (30 requests per minute)
   - Prevents abuse and brute force attacks
   - Redis-based implementation for distributed rate limiting
+
+- SQL Injection Prevention
+  - Using sqlc for type-safe database access
+  - All SQL queries are parameterized and compiled at build time
+  - No string concatenation or dynamic SQL generation
+  - Automatic parameter binding prevents injection attacks
+  - Strict type checking ensures data integrity
 
 ## Technologies and Tools
 
