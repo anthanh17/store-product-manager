@@ -6,6 +6,16 @@ The Online Store Product Management System is a RESTful API built to manage prod
 
 > **Note:** This project was developed as part of an `8-hour coding challenge` to build an entire system from design to implementation. Due to the time constraints, not all API endpoints are fully implemented, and there may be some limitations. The challenge of building a complete system in such a short timeframe was an exciting exercise in prioritization and efficient development.
 
+> **Work in Progress:** The following Redis-based features have been implemented in `internal/handler/http/ping.go` for testing and will be integrated into other API endpoints for monitoring, evaluation, and logging if time permits:
+>
+> 1. **Concurrency Control** - `/ping` API implements a mutex lock using Redis to ensure only one user can access it at a time (with a 5-second sleep for demonstration).
+>
+> 2. **Request Tracking** - Counting mechanism to track how many times each user calls the `/ping` API.
+>
+> 3. **Usage Statistics** - `/top` API returns the top 10 users who have called the `/ping` API most frequently.
+>
+> 4. **Approximate Counting** - Using Redis HyperLogLog to efficiently estimate the number of unique users who have called the `/ping` API, accessible via the `/count` endpoint.
+
 ## Features
 
 - Authentication System
@@ -14,6 +24,7 @@ The Online Store Product Management System is a RESTful API built to manage prod
   - Login with JWT token authentication
   - Access token and refresh token mechanism
   - Token-based authorization for protected routes
+  - Session Management - `/login` API creates and stores user sessions in Redis, associating session IDs with usernames for efficient authentication.
 
 - Rate Limiting - Security: DDOS
 
@@ -22,6 +33,7 @@ The Online Store Product Management System is a RESTful API built to manage prod
   - Redis-based implementation for distributed rate limiting
 
 - SQL Injection Prevention
+
   - Using sqlc for type-safe database access
   - All SQL queries are parameterized and compiled at build time
   - No string concatenation or dynamic SQL generation
