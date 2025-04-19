@@ -1,0 +1,82 @@
+### Variables
+@baseUrl = http://localhost:8081
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE0NmVkYzc3LThkMjMtNDczZi1hYjJmLWI4ODg4Y2U3ZTU5NCIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTY6Mjk6MDUuMDEyMzcyKzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMTlUMTY6NDQ6MDUuMDEyMzczKzA3OjAwIn0.FjyD0WERAoJDnWDeM3WmYrooRcDLMBSg2DQ0v7YmWM4
+
+### Create User
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser2d3",
+  "password": "password123",
+  "full_name": "Test User",
+  "email": "tesd13@example.com"
+}
+
+### Login User
+# This will return access and refresh tokens
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser2d3",
+  "password": "password123"
+}
+
+### Renew Access Token
+# Use this when your access token expires but refresh token is still valid
+POST {{baseUrl}}/tokens/renew_access
+Content-Type: application/json
+
+{
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkZTBhNWIwLTdlYjktNGQ0Ny04NGZhLTQ4NTZhMWEwZWJiZCIsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTM6NTg6MTMuMTI1NDExKzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMjBUMTM6NTg6MTMuMTI1NDExKzA3OjAwIn0.qbmMh3UjIpUFOjO35MIBr_qo5oSvBzeOkBeLLuyQAEo"
+}
+
+### Create Product
+# status: IN_STOCK or OUT_OF_STOCK
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Test Product",
+  "description": "This is a test product description",
+  "price": 99.99,
+  "stock_quantity": 100,
+  "status": "IN_STOCK",
+  "image_url": "https://example.com/test-product.jpg",
+  "category_ids": []
+}
+
+
+### Create Category
+POST {{baseUrl}}/api/categories
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Category6",
+  "description": "Category6"
+}
+
+### List Categories
+GET {{baseUrl}}/api/categories?page=1&limit=10
+Authorization: Bearer {{authToken}}
+
+### Get Category Details
+GET {{baseUrl}}/api/categories/1
+Authorization: Bearer {{authToken}}
+
+### Update Category
+PUT {{baseUrl}}/api/categories/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Updated Electronics",
+  "description": "Updated description for electronic devices and gadgets"
+}
+
+### Delete Category
+DELETE {{baseUrl}}/api/categories/2
+Authorization: Bearer {{authToken}}
