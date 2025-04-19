@@ -73,9 +73,9 @@ func (server *Server) setupRouter() {
 	// product routes
 	// authRoutes.GET("/products", server.listProducts)
 	authRoutes.POST("/api/products", server.createProduct)
-	// authRoutes.GET("/products/:id", server.getProduct)
-	// authRoutes.PUT("/products/:id", server.updateProduct)
-	// authRoutes.DELETE("/products/:id", server.deleteProduct)
+	authRoutes.GET("/api/products/:id", server.getProduct)
+	// authRoutes.PUT("/api/products/:id", server.updateProduct)
+	authRoutes.DELETE("/api/products/:id", server.deleteProduct)
 
 	// category routes
 	authRoutes.POST("/api/categories", server.createCategory)

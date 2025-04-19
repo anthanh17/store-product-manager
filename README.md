@@ -156,43 +156,7 @@ CREATE TABLE wishlist (
   }
   ```
 
-#### Get Product Details
 
-- **Endpoint**: `GET /api/products/{id}`
-- **Description**: Get detailed information about a product
-- **Response**:
-  ```json
-  {
-    "status": "success",
-    "data": {
-      "id": 1,
-      "name": "Product A",
-      "description": "Description of Product A",
-      "price": 100000,
-      "stock_quantity": 50,
-      "status": "active",
-      "image_url": "https://example.com/image.jpg",
-      "categories": [
-        {
-          "id": 1,
-          "name": "Category 1"
-        }
-      ],
-      "reviews": [
-        {
-          "id": 1,
-          "user_id": 2,
-          "username": "user456",
-          "rating": 5,
-          "comment": "Great product",
-          "created_at": "2023-01-02T00:00:00Z"
-        }
-      ],
-      "created_at": "2023-01-01T00:00:00Z",
-      "updated_at": "2023-01-01T00:00:00Z"
-    }
-  }
-  ```
 
 #### Update Product
 

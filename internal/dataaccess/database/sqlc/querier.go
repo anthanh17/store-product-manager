@@ -25,6 +25,7 @@ type Querier interface {
 	GetCategoryByName(ctx context.Context, name string) (Category, error)
 	GetProduct(ctx context.Context, id int32) (GetProductRow, error)
 	GetProductCategories(ctx context.Context, productID int32) ([]Category, error)
+	GetProductReviews(ctx context.Context, productID int32) ([]GetProductReviewsRow, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	GetUser(ctx context.Context, username string) (User, error)
 	ListCategoriesWithPagination(ctx context.Context, arg ListCategoriesWithPaginationParams) ([]Category, error)

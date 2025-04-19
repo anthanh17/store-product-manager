@@ -1,6 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:8081
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE0NmVkYzc3LThkMjMtNDczZi1hYjJmLWI4ODg4Y2U3ZTU5NCIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTY6Mjk6MDUuMDEyMzcyKzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMTlUMTY6NDQ6MDUuMDEyMzczKzA3OjAwIn0.FjyD0WERAoJDnWDeM3WmYrooRcDLMBSg2DQ0v7YmWM4
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ1Nzk3YmJmLWQ0ZTItNDM3Mi1hNjk3LWMwNWE4M2JiMTJiMSIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTc6MDI6MTYuMzE0MzIyKzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMTlUMTc6MTc6MTYuMzE0MzIyKzA3OjAwIn0.-EelZzsUokKfisqpDhNT5Mx0pOD9vE1d0-3nX60F1VI
 
 ### Create User
 POST {{baseUrl}}/api/auth/register
@@ -47,6 +47,10 @@ Content-Type: application/json
   "image_url": "https://example.com/test-product.jpg",
   "category_ids": []
 }
+
+### Get Product Details
+GET {{baseUrl}}/api/products/1
+Authorization: Bearer {{authToken}}
 
 
 ### Create Category

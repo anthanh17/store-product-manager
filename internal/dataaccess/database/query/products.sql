@@ -28,6 +28,14 @@ WHERE p.id = $1
 GROUP BY p.id
 LIMIT 1;
 
+-- name: GetProductReviews :many
+SELECT r.id, r.product_id, r.user_id, u.username, r.rating, r.comment, r.created_at
+FROM reviews r
+JOIN users u ON r.user_id = u.id
+WHERE r.product_id = $1
+ORDER BY r.created_at DESC;
+
+
 -- name: UpdateProduct :one
 UPDATE products
 SET name = $2,

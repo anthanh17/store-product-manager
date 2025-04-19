@@ -163,6 +163,52 @@ func (q *Queries) GetProductCategories(ctx context.Context, productID int32) ([]
 	return items, nil
 }
 
+const getProductReviews = `-- name: GetProductReviews :many
+SELECT r.id, r.product_id, r.user_id, u.username, r.rating, r.comment, r.created_at
+FROM reviews r
+JOIN users u ON r.user_id = u.id
+WHERE r.product_id = $1
+ORDER BY r.created_at DESC
+`
+
+type GetProductReviewsRow struct {
+	ID        int32       `json:"id"`
+	ProductID int32       `json:"product_id"`
+	UserID    int32       `json:"user_id"`
+	Username  string      `json:"username"`
+	Rating    int32       `json:"rating"`
+	Comment   pgtype.Text `json:"comment"`
+	CreatedAt time.Time   `json:"created_at"`
+}
+
+func (q *Queries) GetProductReviews(ctx context.Context, productID int32) ([]GetProductReviewsRow, error) {
+	rows, err := q.db.Query(ctx, getProductReviews, productID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetProductReviewsRow{}
+	for rows.Next() {
+		var i GetProductReviewsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.ProductID,
+			&i.UserID,
+			&i.Username,
+			&i.Rating,
+			&i.Comment,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const removeAllProductCategories = `-- name: RemoveAllProductCategories :exec
 DELETE FROM product_categories
 WHERE product_id = $1

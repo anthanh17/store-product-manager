@@ -1,6 +1,8 @@
 package http
 
 import (
+	"database/sql"
+	"fmt"
 	"net/http"
 
 	db "store-product-manager/internal/dataaccess/database/sqlc"
@@ -63,4 +65,52 @@ func (s *Server) createProduct(ctx *gin.Context) {
 		"status":  "success",
 		"message": "Product created successfully",
 	})
+}
+
+type getProductRequest struct {
+	ID int32 `uri:"id" binding:"required,min=1"`
+}
+
+func (s *Server) getProduct(ctx *gin.Context) {
+	var req getProductRequest
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	product, err := s.store.GetProduct(ctx, req.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(fmt.Errorf("product not found")))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	// Get the product's review list
+	reviews, err := s.store.GetProductReviews(ctx, req.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	response := gin.H{
+		"status": "success",
+		"data": gin.H{
+			"id":             product.ID,
+			"name":           product.Name,
+			"description":    product.Description.String,
+			"price":          product.Price,
+			"stock_quantity": product.StockQuantity,
+			"status":         product.Status,
+			"image_url":      product.ImageUrl.String,
+			"categories":     product.Categories,
+			"reviews":        reviews,
+			"created_at":     product.CreatedAt,
+			"updated_at":     product.UpdatedAt,
+		},
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }
