@@ -36,7 +36,6 @@ The Online Store Product Management System is a RESTful API built to manage prod
 - Compile SQL: Sqlc
 - Authentication: JWT (JSON Web Tokens)
 - Container: Docker
-- API Documentation: Swagger
 - Caching: Redis
 - Tools: Makefile, golang-migrate
 - Tests: REST Client for Visual Studio Code - test api
