@@ -1,6 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:8081
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUxODI4ODExLTc0NzMtNGQyZi1iZWE3LTUxNjY2ZWJlMzQyMCIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTc6NTM6MjIuODc3NjkrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNS0wNC0xOVQxODowODoyMi44Nzc2OSswNzowMCJ9.3ZgW-3S3_2wBisXGJXtZONGNPfw4v_GZNKIh1WVfmm0
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljZWEwZjg2LTYyNzQtNDcyNS1hYjYyLWJjNDAyMTU1ODk2MiIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTg6NDQ6NTUuNTg0Nzc5KzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMTlUMTg6NTk6NTUuNTg0Nzc5KzA3OjAwIn0.OnN9uM19h6WJ4xENLkoZDfSpjZ9W_Onuad2dWMS5IZw
 
 ### Create User
 POST {{baseUrl}}/api/auth/register
@@ -32,6 +32,8 @@ Content-Type: application/json
   "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkZTBhNWIwLTdlYjktNGQ0Ny04NGZhLTQ4NTZhMWEwZWJiZCIsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTM6NTg6MTMuMTI1NDExKzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMjBUMTM6NTg6MTMuMTI1NDExKzA3OjAwIn0.qbmMh3UjIpUFOjO35MIBr_qo5oSvBzeOkBeLLuyQAEo"
 }
 
+### ========================== PRODUCTS API ====================================
+
 ### Create Product
 # status: IN_STOCK or OUT_OF_STOCK
 POST {{baseUrl}}/api/products
@@ -39,11 +41,11 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "name": "Test Product delete kakak",
-  "description": "This is a test product description",
-  "price": 99.99,
-  "stock_quantity": 100,
-  "status": "IN_STOCK",
+  "name": "anthanh",
+  "description": "This is anthanh",
+  "price": 99.99999,
+  "stock_quantity": 1232,
+  "status": "OUT_OF_STOCK",
   "image_url": "https://example.com/test-product.jpg",
   "category_ids": [1, 2]
 }
@@ -71,7 +73,25 @@ Content-Type: application/json
   "category_ids": [2]
 }
 
+### List Products (Basic)
+GET {{baseUrl}}/api/products?page=1&limit=10
+Authorization: Bearer {{authToken}}
 
+### List Products (Filter by Status) IN_STOCK
+GET {{baseUrl}}/api/products?page=1&limit=10&status=IN_STOCK
+Authorization: Bearer {{authToken}}
+
+### List Products (Filter by Status) OUT_OF_STOCK
+GET {{baseUrl}}/api/products?page=1&limit=10&status=OUT_OF_STOCK
+Authorization: Bearer {{authToken}}
+
+### List Products (Search by Name)
+GET {{baseUrl}}/api/products?page=1&limit=10&search_product_name=tes
+Authorization: Bearer {{authToken}}
+
+### List Products (Combined Filters)
+GET {{baseUrl}}/api/products?page=1&limit=10&status=IN_STOCK&search_product_name=an
+Authorization: Bearer {{authToken}}
 
 
 

@@ -14,6 +14,7 @@ type Querier interface {
 	AddProductCategory(ctx context.Context, arg AddProductCategoryParams) error
 	CountCategories(ctx context.Context) (int64, error)
 	CountCategoriesWithName(ctx context.Context, name string) (int64, error)
+	CountProductsWithFilters(ctx context.Context, arg CountProductsWithFiltersParams) (int64, error)
 	CreateCategory(ctx context.Context, arg CreateCategoryParams) (Category, error)
 	CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error)
 	CreateProductCategory(ctx context.Context, arg CreateProductCategoryParams) (ProductCategory, error)
@@ -30,6 +31,7 @@ type Querier interface {
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	GetUser(ctx context.Context, username string) (User, error)
 	ListCategoriesWithPagination(ctx context.Context, arg ListCategoriesWithPaginationParams) ([]Category, error)
+	ListProductsWithFilters(ctx context.Context, arg ListProductsWithFiltersParams) ([]ListProductsWithFiltersRow, error)
 	RemoveAllProductCategories(ctx context.Context, productID int32) error
 	RemoveProductCategory(ctx context.Context, arg RemoveProductCategoryParams) error
 	UpdateCategory(ctx context.Context, arg UpdateCategoryParams) (Category, error)

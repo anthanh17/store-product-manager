@@ -266,3 +266,88 @@ func (s *Server) updateProduct(ctx *gin.Context) {
 	s.logger.Sugar().Infof("\nProduct updated successfully, product ID: %v\n", reqURI.ID)
 	ctx.JSON(http.StatusOK, response)
 }
+
+type listProductsRequest struct {
+	Page              int32  `form:"page" binding:"required,min=1"`
+	Limit             int32  `form:"limit" binding:"required,min=5,max=100"`
+	Status            string `form:"status"`
+	SearchProductName string `form:"search_product_name"`
+}
+
+func (s *Server) listProducts(ctx *gin.Context) {
+	s.logger.Info("API call: listProducts")
+
+	var req listProductsRequest
+	if err := ctx.ShouldBindQuery(&req); err != nil {
+		s.logger.Sugar().Infof("\nInvalid query parameters for listProducts: %v\n", err)
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	offset := (req.Page - 1) * req.Limit
+	s.logger.Sugar().Infof("\nFetching products with pagination, page: %v, limit: %v\n", req.Page, req.Limit)
+
+	// Validate status if provided
+	if req.Status != "" && req.Status != "IN_STOCK" && req.Status != "OUT_OF_STOCK" {
+		s.logger.Sugar().Infof("\nInvalid status filter: %v\n", req.Status)
+		ctx.JSON(http.StatusBadRequest, errorResponse(fmt.Errorf("invalid status, must be IN_STOCK or OUT_OF_STOCK")))
+		return
+	}
+
+	// Log filter parameters if provided
+	if req.Status != "" {
+		s.logger.Sugar().Infof("\nFiltering by status: %v\n", req.Status)
+	}
+	if req.SearchProductName != "" {
+		s.logger.Sugar().Infof("\nSearching for product name: %v\n", req.SearchProductName)
+	}
+
+	// Prepare search pattern for product name
+	searchPattern := ""
+	if req.SearchProductName != "" {
+		searchPattern = "%" + req.SearchProductName + "%"
+	}
+
+	s.logger.Sugar().Infof("\nPreparing to query products with filters - Status: '%v', Search: '%v'\n", req.Status, req.SearchProductName)
+
+	argListProducts := db.ListProductsWithFiltersParams{
+		Limit:             req.Limit,
+		Offset:            offset,
+		Status:            req.Status,
+		SearchProductName: searchPattern,
+	}
+
+	products, err := s.store.ListProductsWithFilters(ctx, argListProducts)
+	if err != nil {
+		s.logger.Sugar().Infof("\nFailed to list products: %v\n", err)
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	s.logger.Sugar().Infof("\nCounting total products with filters\n")
+	countArg := db.CountProductsWithFiltersParams{
+		Status:            req.Status,
+		SearchProductName: searchPattern,
+	}
+
+	totalCount, err := s.store.CountProductsWithFilters(ctx, countArg)
+	if err != nil {
+		s.logger.Sugar().Infof("\nFailed to count products: %v\n", err)
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	s.logger.Sugar().Infof("\nProducts retrieved successfully, total count: %v\n", totalCount)
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data": gin.H{
+			"products": products,
+			"pagination": gin.H{
+				"total": totalCount,
+				"page":  req.Page,
+				"limit": req.Limit,
+				"pages": (totalCount + int64(req.Limit) - 1) / int64(req.Limit),
+			},
+		},
+	})
+}

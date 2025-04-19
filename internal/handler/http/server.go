@@ -71,7 +71,7 @@ func (server *Server) setupRouter() {
 	authRoutes.GET("/count", server.count)
 
 	// product routes
-	// authRoutes.GET("/products", server.listProducts)
+	authRoutes.GET("/api/products", server.listProducts)
 	authRoutes.POST("/api/products", server.createProduct)
 	authRoutes.GET("/api/products/:id", server.getProduct)
 	authRoutes.PUT("/api/products/:id", server.updateProduct)

@@ -31,6 +31,27 @@ func (q *Queries) AddProductCategory(ctx context.Context, arg AddProductCategory
 	return err
 }
 
+const countProductsWithFilters = `-- name: CountProductsWithFilters :one
+SELECT COUNT(DISTINCT p.id)
+FROM products p
+WHERE
+    ($1::text = '' OR p.status = $1::text)
+    AND
+    ($2::text = '' OR p.name ILIKE $2)
+`
+
+type CountProductsWithFiltersParams struct {
+	Status            string `json:"status"`
+	SearchProductName string `json:"search_product_name"`
+}
+
+func (q *Queries) CountProductsWithFilters(ctx context.Context, arg CountProductsWithFiltersParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countProductsWithFilters, arg.Status, arg.SearchProductName)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createProduct = `-- name: CreateProduct :one
 INSERT INTO products (
   name,
@@ -208,6 +229,84 @@ func (q *Queries) GetProductReviews(ctx context.Context, productID int32) ([]Get
 			&i.Rating,
 			&i.Comment,
 			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listProductsWithFilters = `-- name: ListProductsWithFilters :many
+SELECT p.id, p.name, p.description, p.price, p.stock_quantity, p.status, p.image_url, p.created_at, p.updated_at,
+       COALESCE(
+           json_agg(
+               json_build_object(
+                   'id', c.id,
+                   'name', c.name
+               )
+           ) FILTER (WHERE c.id IS NOT NULL), '[]'
+       ) as categories
+FROM products p
+LEFT JOIN product_categories pc ON p.id = pc.product_id
+LEFT JOIN categories c ON pc.category_id = c.id
+WHERE
+    ($3::text = '' OR p.status = $3::text)
+    AND
+    ($4::text = '' OR p.name ILIKE $4)
+GROUP BY p.id
+ORDER BY p.created_at DESC
+LIMIT $1 OFFSET $2
+`
+
+type ListProductsWithFiltersParams struct {
+	Limit             int32  `json:"limit"`
+	Offset            int32  `json:"offset"`
+	Status            string `json:"status"`
+	SearchProductName string `json:"search_product_name"`
+}
+
+type ListProductsWithFiltersRow struct {
+	ID            int32       `json:"id"`
+	Name          string      `json:"name"`
+	Description   pgtype.Text `json:"description"`
+	Price         float64     `json:"price"`
+	StockQuantity int32       `json:"stock_quantity"`
+	Status        string      `json:"status"`
+	ImageUrl      pgtype.Text `json:"image_url"`
+	CreatedAt     time.Time   `json:"created_at"`
+	UpdatedAt     time.Time   `json:"updated_at"`
+	Categories    interface{} `json:"categories"`
+}
+
+func (q *Queries) ListProductsWithFilters(ctx context.Context, arg ListProductsWithFiltersParams) ([]ListProductsWithFiltersRow, error) {
+	rows, err := q.db.Query(ctx, listProductsWithFilters,
+		arg.Limit,
+		arg.Offset,
+		arg.Status,
+		arg.SearchProductName,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListProductsWithFiltersRow{}
+	for rows.Next() {
+		var i ListProductsWithFiltersRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Description,
+			&i.Price,
+			&i.StockQuantity,
+			&i.Status,
+			&i.ImageUrl,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Categories,
 		); err != nil {
 			return nil, err
 		}

@@ -78,3 +78,34 @@ WHERE product_id = $1 AND category_id = $2;
 -- name: RemoveAllProductCategories :exec
 DELETE FROM product_categories
 WHERE product_id = $1;
+
+-- name: ListProductsWithFilters :many
+SELECT p.*,
+       COALESCE(
+           json_agg(
+               json_build_object(
+                   'id', c.id,
+                   'name', c.name
+               )
+           ) FILTER (WHERE c.id IS NOT NULL), '[]'
+       ) as categories
+FROM products p
+LEFT JOIN product_categories pc ON p.id = pc.product_id
+LEFT JOIN categories c ON pc.category_id = c.id
+WHERE
+    (@status::text = '' OR p.status = @status::text)
+    AND
+    (@search_product_name::text = '' OR p.name ILIKE @search_product_name)
+GROUP BY p.id
+ORDER BY p.created_at DESC
+LIMIT $1 OFFSET $2;
+
+
+
+-- name: CountProductsWithFilters :one
+SELECT COUNT(DISTINCT p.id)
+FROM products p
+WHERE
+    (@status::text = '' OR p.status = @status::text)
+    AND
+    (@search_product_name::text = '' OR p.name ILIKE @search_product_name);
