@@ -20,6 +20,9 @@ FROM alpine:3.18
 
 WORKDIR /app
 
+# Set Gin to release mode
+ENV GIN_MODE=release
+
 # Install necessary packages
 RUN apk --no-cache add ca-certificates tzdata curl bash postgresql-client
 

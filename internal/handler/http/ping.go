@@ -24,7 +24,7 @@ func (s *Server) ping(ctx *gin.Context) {
 	 */
 	// Check rate limit
 	rateLimittKey := "rate_limit:" + accessPayload.Username
-	if ok, err := s.sessionCache.CheckRateLimit(ctx, rateLimittKey); err != nil || !ok {
+	if ok, err := s.sessionCache.CheckRateLimit(ctx, rateLimittKey, 2, time.Minute); err != nil || !ok {
 		ctx.JSON(
 			http.StatusTooManyRequests,
 			gin.H{"error": "each client can only call API /ping 2 times"},

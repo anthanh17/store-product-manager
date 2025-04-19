@@ -4,7 +4,19 @@
 
 The Online Store Product Management System is a RESTful API built to manage products in an online store. The system allows users to perform CRUD (Create, Read, Update, Delete) operations on products, manage categories, reviews, and wishlists.
 
-> I have written an api to test the rate limit feature but have not yet integrated it into the api terminals
+## Features
+
+- Authentication System
+
+  - User registration with password hashing (bcrypt)
+  - Login with JWT token authentication
+  - Access token and refresh token mechanism
+  - Token-based authorization for protected routes
+
+- Rate Limiting
+  - All APIs are protected with rate limiting (30 requests per minute)
+  - Prevents abuse and brute force attacks
+  - Redis-based implementation for distributed rate limiting
 
 ## Technologies and Tools
 

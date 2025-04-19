@@ -1,6 +1,7 @@
 ### Variables
 @baseUrl = http://localhost:8081
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk5ZTc0YjE1LTU2NDMtNDg5ZS04NTdjLTIxNjBiYTg2NzFlNiIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTk6MDI6MjUuNTQ2MTQrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNS0wNC0xOVQxOToxNzoyNS41NDYxNDErMDc6MDAifQ.zbgj6nQN3DCD1EC443rzAcxsLq9hWKnuD-vLJ40KOH4
+@authToken = "enter_your_access_token"
+# Get from login api
 
 ### Create User
 POST {{baseUrl}}/api/auth/register
@@ -19,8 +20,8 @@ POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "testuser2d3",
-  "password": "password123"
+  "username": "testuser2drrr3",
+  "password": "passworrrrd123"
 }
 
 ### Renew Access Token
@@ -31,6 +32,41 @@ Content-Type: application/json
 {
   "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwNmI4MGU0LTdiM2EtNGQ0Mi1iODEzLTM0NDRiNzlkMjFhNyIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTk6MTg6MjQuODM1Nzg0KzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMjBUMTk6MTg6MjQuODM1Nzg0KzA3OjAwIn0.Z6WPIN9CK7901aQkGFNRPUYysfDrG4cN6a4YzgysE_Q"
 }
+
+# ================================ CATEGORY ====================================
+
+### Create Category
+POST {{baseUrl}}/api/categories
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Category1",
+  "description": "Category1"
+}
+
+### List Categories
+GET {{baseUrl}}/api/categories?page=1&limit=10
+Authorization: Bearer {{authToken}}
+
+### Get Category Details
+GET {{baseUrl}}/api/categories/1
+Authorization: Bearer {{authToken}}
+
+### Update Category
+PUT {{baseUrl}}/api/categories/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Updated Electronics",
+  "description": "Updated description for electronic devices and gadgets"
+}
+
+### Delete Category
+DELETE {{baseUrl}}/api/categories/2
+Authorization: Bearer {{authToken}}
+
 
 ### ========================== PRODUCTS API ====================================
 
@@ -93,41 +129,7 @@ Authorization: Bearer {{authToken}}
 GET {{baseUrl}}/api/products?page=1&limit=10&status=IN_STOCK&search_product_name=an
 Authorization: Bearer {{authToken}}
 
-# -------------------------------- CATEGORY ------------------------------------
-
-### Create Category
-POST {{baseUrl}}/api/categories
-Authorization: Bearer {{authToken}}
-Content-Type: application/json
-
-{
-  "name": "Category2",
-  "description": "Category2"
-}
-
-### List Categories
-GET {{baseUrl}}/api/categories?page=1&limit=10
-Authorization: Bearer {{authToken}}
-
-### Get Category Details
-GET {{baseUrl}}/api/categories/1
-Authorization: Bearer {{authToken}}
-
-### Update Category
-PUT {{baseUrl}}/api/categories/1
-Authorization: Bearer {{authToken}}
-Content-Type: application/json
-
-{
-  "name": "Updated Electronics",
-  "description": "Updated description for electronic devices and gadgets"
-}
-
-### Delete Category
-DELETE {{baseUrl}}/api/categories/2
-Authorization: Bearer {{authToken}}
-
-### ========================== Dashboard ====================================
+### ========================== Dashboard =======================================
 
 ### Get Dashboard Summary
 GET {{baseUrl}}/api/dashboard/summary

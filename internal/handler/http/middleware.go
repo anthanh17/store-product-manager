@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"store-product-manager/internal/handler/token"
 
@@ -50,6 +51,30 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		}
 
 		ctx.Set(authorizationPayloadKey, payload)
+		ctx.Next()
+	}
+}
+
+// RateLimitMiddleware creates a gin middleware for rate limiting
+func (s *Server) rateLimitMiddleware(limit int, duration time.Duration) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		// Get data by access token
+		accessPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+		// Check rate limit
+		rateLimitKey := fmt.Sprintf("rate_limit:%s:%s", ctx.FullPath(), accessPayload.Username)
+
+		// Check if rate limit is exceeded
+		ok, err := s.sessionCache.CheckRateLimit(ctx, rateLimitKey, limit, duration)
+		if err != nil || !ok {
+			ctx.JSON(
+				http.StatusTooManyRequests,
+				gin.H{"error": fmt.Sprintf("Rate limit exceeded: maximum %d requests in %v", limit, duration)},
+			)
+			ctx.Abort()
+			return
+		}
+
 		ctx.Next()
 	}
 }

@@ -20,7 +20,7 @@ type SessionCache interface {
 	Del(ctx context.Context, key string) error
 
 	// Add on
-	CheckRateLimit(ctx context.Context, key string) (bool, error)
+	CheckRateLimit(ctx context.Context, key string, limit int, duration time.Duration) (bool, error)
 	// Increase the number of calls in Sorted Set
 	IncreaseTopCalls(ctx context.Context, key string, username string) error
 	// Get the top 10 users with the most calls
@@ -145,7 +145,7 @@ func (s sessionCache) SetPingLock(ctx context.Context, key string, data any) (bo
 	return ok, nil
 }
 
-func (s sessionCache) CheckRateLimit(ctx context.Context, key string) (bool, error) {
+func (s sessionCache) CheckRateLimit(ctx context.Context, key string, limit int, duration time.Duration) (bool, error) {
 	cachier, ok := s.cachier.(*redisClient)
 	if !ok {
 		s.logger.Info("cachier is not redis")
@@ -160,8 +160,8 @@ func (s sessionCache) CheckRateLimit(ctx context.Context, key string) (bool, err
 		return false, fmt.Errorf("error LRange")
 	}
 
-	// Exits lenght list > 2
-	if len(val) >= 2 {
+	// Exits lenght list > limit
+	if len(val) >= limit {
 		return false, nil
 	}
 
@@ -173,7 +173,7 @@ func (s sessionCache) CheckRateLimit(ctx context.Context, key string) (bool, err
 	}
 
 	// Setting TTL for key (60s)
-	err = cachier.redisClient.Expire(ctx, key, 60*time.Second).Err()
+	err = cachier.redisClient.Expire(ctx, key, duration).Err()
 	if err != nil {
 		s.logger.Info("error Setting TTL for key: " + err.Error())
 		return false, fmt.Errorf("error Setting TTL for key")
