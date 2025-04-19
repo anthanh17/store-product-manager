@@ -90,7 +90,7 @@ Benefits of using REST Client:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/store-product-manager.git
+   git clone https://github.com/anthanh17/store-product-manager.git
    cd store-product-manager
    ```
 
