@@ -4,6 +4,8 @@
 
 The Online Store Product Management System is a RESTful API built to manage products in an online store. The system allows users to perform CRUD (Create, Read, Update, Delete) operations on products, manage categories, reviews, and wishlists.
 
+> I have written an api to test the rate limit feature but have not yet integrated it into the api terminals
+
 ## Technologies and Tools
 
 - Language: Golang
@@ -14,6 +16,48 @@ The Online Store Product Management System is a RESTful API built to manage prod
 - Container: Docker
 - API Documentation: Swagger
 - Caching: Redis
+- Tools: Makefile
+- Tests: REST Client for Visual Studio Code - test api
+  > I have written all the sample runs in file ./test/api.http
+
+## Setup Guide
+
+### System Requirements
+
+- Go 1.23 or higher
+- PostgreSQL 14 or higher
+- Docker and Docker Compose
+
+#### How to use
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/store-product-manager.git
+   cd store-product-manager
+   ```
+
+2. Setup project:
+
+   ```bash
+   make databaseup
+   ```
+
+3. Migrate database:
+
+   ```bash
+   make migrateup
+   ```
+
+4. Run server:
+
+   ```bash
+   make server
+   ```
+
+## Tests
+
+- Please check the api tests in the folder `/tests/api.http`
 
 ## Database Schema
 
@@ -107,6 +151,368 @@ CREATE TABLE wishlist (
 
 ## API Documentation
 
+### Authentication
+
+#### Register
+
+- **Endpoint**: `POST /api/auth/register`
+- **Description**: Register a new user
+- **Request Body**:
+  ```json
+  {
+    "username": "user123",
+    "email": "user@example.com",
+    "password": "securepassword",
+    "full_name": "John Doe"
+  }
+  ```
+- **Response**:
+
+  ```json
+  HTTP/1.1 200 OK
+  Content-Type: application/json; charset=utf-8
+  Date: Sat, 19 Apr 2025 12:16:32 GMT
+  Content-Length: 183
+  Connection: close
+
+  {
+    "username": "testuser2drrr3",
+    "full_name": "Test User",
+    "email": "tesd1dss3@example.com",
+    "password_changed_at": "0001-01-01T07:06:30+07:06",
+    "created_at": "2025-04-19T19:16:32.032964+07:00"
+  }
+  ```
+
+#### Login
+
+- **Endpoint**: `POST /api/auth/login`
+- **Description**: Login and receive JWT token
+- **Request Body**:
+  ```json
+  {
+    "username": "user123",
+    "password": "securepassword"
+  }
+  ```
+- **Response**:
+
+  ```json
+  {
+    "session_id": "006b80e4-7b3a-4d42-b813-3444b79d21a7",
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZGIyM2Y3LTU2YmUtNDJiOC05MDJlLTYyMzZmNmUyYTRlNSIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTk6MTg6MjQuODM1NzE1KzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMTlUMTk6MzM6MjQuODM1NzE1KzA3OjAwIn0.ahuNNWM4Xrs85SVAcAmfWVTNtMMlGDkeiMhp68DtpF0",
+    "access_token_expires_at": "2025-04-19T19:33:24.835715+07:00",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwNmI4MGU0LTdiM2EtNGQ0Mi1iODEzLTM0NDRiNzlkMjFhNyIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTk6MTg6MjQuODM1Nzg0KzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMjBUMTk6MTg6MjQuODM1Nzg0KzA3OjAwIn0.Z6WPIN9CK7901aQkGFNRPUYysfDrG4cN6a4YzgysE_Q",
+    "refresh_token_expires_at": "2025-04-20T19:18:24.835784+07:00",
+    "user": {
+      "username": "testuser2d3",
+      "full_name": "Test User",
+      "email": "tesd13@example.com",
+      "password_changed_at": "0001-01-01T07:06:30+07:06",
+      "created_at": "2025-04-19T17:26:55.901829+07:00"
+    }
+  }
+  ```
+
+#### Renew Access Token
+
+- **Endpoint**: `POST /tokens/renew_access`
+- **Description**: Renew Access Token
+- **Request Body**:
+  ```json
+  {
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwNmI4MGU0LTdiM2EtNGQ0Mi1iODEzLTM0NDRiNzlkMjFhNyIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTk6MTg6MjQuODM1Nzg0KzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMjBUMTk6MTg6MjQuODM1Nzg0KzA3OjAwIn0.Z6WPIN9CK7901aQkGFNRPUYysfDrG4cN6a4YzgysE_Q"
+  }
+  ```
+- **Response**:
+
+  ```json
+  {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjMzBiNmNkLTdiOTctNDM0OC1hNjYwLWNhYTIyODIwNjBkNCIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTk6MTk6NTkuOTI4NTAzKzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMTlUMTk6MzQ6NTkuOTI4NTAzKzA3OjAwIn0.W4iYA28Mpv9uEzKJM9VctSBldnecTQ52V5G9L6pbnAk",
+    "access_token_expires_at": "2025-04-19T19:34:59.928503+07:00"
+  }
+  ```
+
+---
+
+### Product Management
+
+#### Create New Product
+
+- **Endpoint**: `POST /api/products`
+- **Description**: Create a new product
+- **Request Body**:
+  ```json
+  {
+    "name": "Product B",
+    "description": "Description of Product B",
+    "price": 150000,
+    "stock_quantity": 30,
+    "status": "active",
+    "image_url": "https://example.com/image2.jpg",
+    "category_ids": [1, 2]
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "message": "Product created successfully",
+    "data": {
+      "id": 2,
+      "name": "Product B",
+      "description": "Description of Product B",
+      "price": 150000,
+      "stock_quantity": 30,
+      "status": "active",
+      "image_url": "https://example.com/image2.jpg",
+      "categories": [
+        {
+          "id": 1,
+          "name": "Category 1"
+        },
+        {
+          "id": 2,
+          "name": "Category 2"
+        }
+      ],
+      "created_at": "2023-01-03T00:00:00Z",
+      "updated_at": "2023-01-03T00:00:00Z"
+    }
+  }
+  ```
+
+#### Get Product Details
+
+- **Endpoint**: `GET /api/products/{id}`
+- **Description**: Get detailed information about a product
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "id": 1,
+      "name": "Product A",
+      "description": "Description of Product A",
+      "price": 100000,
+      "stock_quantity": 50,
+      "status": "active",
+      "image_url": "https://example.com/image.jpg",
+      "categories": [
+        {
+          "id": 1,
+          "name": "Category 1"
+        }
+      ],
+      "reviews": [
+        {
+          "id": 1,
+          "user_id": 2,
+          "username": "user456",
+          "rating": 5,
+          "comment": "Great product",
+          "created_at": "2023-01-02T00:00:00Z"
+        }
+      ],
+      "created_at": "2023-01-01T00:00:00Z",
+      "updated_at": "2023-01-01T00:00:00Z"
+    }
+  }
+  ```
+
+#### Get Product List (Paginated)
+
+- **Endpoint**: `GET /api/products`
+- **Description**: Get a paginated list of products with filtering
+- **Query Parameters**:
+  - `page`: Page number (default: 1)
+  - `limit`: Number of products per page (default: 10)
+  - `sort`: Field to sort by (default: created_at)
+  - `search_product_name`: Search product name keyword
+  - `category_id`: Filter by category
+  - `price_sort`: sort price (asc/desc, default: desc)
+  - `status`: Product status
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "products": [
+        {
+          "id": 1,
+          "name": "Product A",
+          "description": "Description of Product A",
+          "price": 100000,
+          "stock_quantity": 50,
+          "status": "active",
+          "image_url": "https://example.com/image.jpg",
+          "categories": [
+            {
+              "id": 1,
+              "name": "Category 1"
+            }
+          ],
+          "created_at": "2023-01-01T00:00:00Z",
+          "updated_at": "2023-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": {
+        "total": 100,
+        "page": 1,
+        "limit": 10,
+        "total_pages": 10
+      }
+    }
+  }
+  ```
+
+#### Update Product
+
+- **Endpoint**: `PUT /api/products/{id}`
+- **Description**: Update product information
+- **Request Body**:
+  ```json
+  {
+    "name": "Product B (Updated)",
+    "description": "Updated description of Product B",
+    "price": 160000,
+    "stock_quantity": 25,
+    "status": "active",
+    "image_url": "https://example.com/image2_updated.jpg",
+    "category_ids": [1, 3]
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "message": "Product updated successfully",
+    "data": {
+      "id": 2,
+      "name": "Product B (Updated)",
+      "description": "Updated description of Product B",
+      "price": 160000,
+      "stock_quantity": 25,
+      "status": "active",
+      "image_url": "https://example.com/image2_updated.jpg",
+      "categories": [
+        {
+          "id": 1,
+          "name": "Category 1"
+        },
+        {
+          "id": 3,
+          "name": "Category 3"
+        }
+      ],
+      "updated_at": "2023-01-04T00:00:00Z"
+    }
+  }
+  ```
+
+#### Delete Product
+
+- **Endpoint**: `DELETE /api/products/{id}`
+- **Description**: Delete a product
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "message": "Product deleted successfully"
+  }
+  ```
+
+### Category Management
+
+#### Create New Category
+
+- **Endpoint**: `POST /api/categories`
+- **Description**: Create a new category
+- **Request Body**:
+  ```json
+  {
+    "name": "Category 3",
+    "description": "Description of Category 3"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "message": "Category created successfully"
+  }
+  ```
+
+#### Get Category List
+
+- **Endpoint**: `GET /api/categories`
+- **Description**: Get a list of all categories
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "data": [
+      {
+        "id": 1,
+        "name": "Category 1",
+        "description": "Description of Category 1"
+      },
+      {
+        "id": 2,
+        "name": "Category 2",
+        "description": "Description of Category 2"
+      }
+    ]
+  }
+  ```
+
+### Dashboard
+
+- **Endpoint**: `GET /api/dashboard/summary`
+- **Description**: View dashboard summary
+
+- **Response**:
+
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "total_categories": 5,
+      "total_products": 25,
+      "categories": [
+        {
+          "id": 1,
+          "name": "Electronics",
+          "description": "Electronic devices and gadgets",
+          "product_count": 10
+        },
+        {
+          "id": 2,
+          "name": "Clothing",
+          "description": "Apparel and fashion items",
+          "product_count": 8
+        },
+        {
+          "id": 3,
+          "name": "Books",
+          "description": "Books and publications",
+          "product_count": 7
+        }
+      ],
+      "status_summary": [
+        {
+          "status": "IN_STOCK",
+          "count": 20
+        },
+        {
+          "status": "OUT_OF_STOCK",
+          "count": 5
+        }
+      ]
+    }
+  }
+  ```
+
 ### Review Management
 
 #### Add Review
@@ -183,42 +589,3 @@ CREATE TABLE wishlist (
     "message": "Product removed from wishlist"
   }
   ```
-
-## Setup Guide
-
-### System Requirements
-
-- Go 1.23 or higher
-- PostgreSQL 14 or higher
-- Docker and Docker Compose
-
-#### How to use
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/yourusername/store-product-manager.git
-   cd store-product-manager
-   ```
-
-2. Setup project:
-
-   ```bash
-   make databaseup
-   ```
-
-3. Migrate database:
-
-   ```bash
-   make migrateup
-   ```
-
-4. Run server:
-
-   ```bash
-   make server
-   ```
-
-## Tests
-
-- Please check the api tests in the folder `/tests/api.http`

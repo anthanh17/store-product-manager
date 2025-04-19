@@ -7,10 +7,10 @@ POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "testuser2d3",
-  "password": "password123",
+  "username": "testuser2drrr3",
+  "password": "passworrrrd123",
   "full_name": "Test User",
-  "email": "tesd13@example.com"
+  "email": "tesd1dss3@example.com"
 }
 
 ### Login User
@@ -29,7 +29,7 @@ POST {{baseUrl}}/tokens/renew_access
 Content-Type: application/json
 
 {
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkZTBhNWIwLTdlYjktNGQ0Ny04NGZhLTQ4NTZhMWEwZWJiZCIsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTM6NTg6MTMuMTI1NDExKzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMjBUMTM6NTg6MTMuMTI1NDExKzA3OjAwIn0.qbmMh3UjIpUFOjO35MIBr_qo5oSvBzeOkBeLLuyQAEo"
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwNmI4MGU0LTdiM2EtNGQ0Mi1iODEzLTM0NDRiNzlkMjFhNyIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTk6MTg6MjQuODM1Nzg0KzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMjBUMTk6MTg6MjQuODM1Nzg0KzA3OjAwIn0.Z6WPIN9CK7901aQkGFNRPUYysfDrG4cN6a4YzgysE_Q"
 }
 
 ### ========================== PRODUCTS API ====================================
