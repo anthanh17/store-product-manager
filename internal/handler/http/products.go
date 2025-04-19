@@ -114,3 +114,38 @@ func (s *Server) getProduct(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, response)
 }
+
+type deleteProductRequest struct {
+	ID int32 `uri:"id" binding:"required,min=1"`
+}
+
+func (s *Server) deleteProduct(ctx *gin.Context) {
+	var req deleteProductRequest
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	// Check products
+	_, err := s.store.GetProduct(ctx, req.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(fmt.Errorf("product not found")))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	// Delete product
+	err = s.store.DeleteProduct(ctx, req.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status":  "success",
+		"message": "Product deleted successfully",
+	})
+}
