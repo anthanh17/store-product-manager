@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"math/big"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -11,7 +10,7 @@ import (
 type CreateProductTxParams struct {
 	Name          string
 	Description   string
-	Price         int32
+	Price         float64
 	StockQuantity int32
 	Status        string
 	ImageURL      string
@@ -32,7 +31,7 @@ func (store *SQLStore) CreateProductTx(ctx context.Context, arg CreateProductTxP
 		argProduct := CreateProductParams{
 			Name:          arg.Name,
 			Description:   pgtype.Text{String: arg.Description, Valid: true},
-			Price:         pgtype.Numeric{Int: big.NewInt(int64(arg.Price)), Valid: true},
+			Price:         arg.Price,
 			StockQuantity: arg.StockQuantity,
 			Status:        arg.Status,
 			ImageUrl:      pgtype.Text{String: arg.ImageURL, Valid: true},

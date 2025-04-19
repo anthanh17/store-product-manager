@@ -1,6 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:8081
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU2ZTQ3ZDk2LTc3MWMtNGI5NC05NzFiLTUzZmJiOWVkNTc4OCIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTc6MTE6NTYuMTk1MzAzKzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMTlUMTc6MjY6NTYuMTk1MzAzKzA3OjAwIn0.hG1_zIAeJrCp1DBV1sAuBOf_MDheaVZHlBtdIFjc6N0
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjczMDg1ZTlhLTg4NWEtNDE3My05MDA1LTI1MTliYTY1NmE3NiIsInVzZXJuYW1lIjoidGVzdHVzZXIyZDMiLCJyb2xlIjoidXNlciIsImlzc3VlZF9hdCI6IjIwMjUtMDQtMTlUMTc6Mjc6MDguMjA1NTk1KzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjUtMDQtMTlUMTc6NDI6MDguMjA1NTk2KzA3OjAwIn0.jxd26rkUGfZ8uUWd1Gz72KlBzH1tTM1Y8Wa7qmBSLlM
 
 ### Create User
 POST {{baseUrl}}/api/auth/register
@@ -39,13 +39,13 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "name": "Test Product delete",
+  "name": "Test Product delete kakak",
   "description": "This is a test product description",
   "price": 99.99,
   "stock_quantity": 100,
   "status": "IN_STOCK",
   "image_url": "https://example.com/test-product.jpg",
-  "category_ids": []
+  "category_ids": [1, 2]
 }
 
 ### Get Product Details
@@ -56,6 +56,20 @@ Authorization: Bearer {{authToken}}
 DELETE {{baseUrl}}/api/products/2
 Authorization: Bearer {{authToken}}
 
+### Update Product
+PUT {{baseUrl}}/api/products/2
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Updated Product",
+  "description": "This is an updated product description",
+  "price": 149.99,
+  "stock_quantity": 75,
+  "status": "IN_STOCK",
+  "image_url": "https://example.com/updated-product.jpg",
+  "category_ids": [2]
+}
 
 
 
@@ -75,8 +89,8 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "name": "Category6",
-  "description": "Category6"
+  "name": "Category2",
+  "description": "Category2"
 }
 
 ### List Categories

@@ -18,15 +18,15 @@ type Category struct {
 }
 
 type Product struct {
-	ID            int32          `json:"id"`
-	Name          string         `json:"name"`
-	Description   pgtype.Text    `json:"description"`
-	Price         pgtype.Numeric `json:"price"`
-	StockQuantity int32          `json:"stock_quantity"`
-	Status        string         `json:"status"`
-	ImageUrl      pgtype.Text    `json:"image_url"`
-	CreatedAt     time.Time      `json:"created_at"`
-	UpdatedAt     time.Time      `json:"updated_at"`
+	ID            int32       `json:"id"`
+	Name          string      `json:"name"`
+	Description   pgtype.Text `json:"description"`
+	Price         float64     `json:"price"`
+	StockQuantity int32       `json:"stock_quantity"`
+	Status        string      `json:"status"`
+	ImageUrl      pgtype.Text `json:"image_url"`
+	CreatedAt     time.Time   `json:"created_at"`
+	UpdatedAt     time.Time   `json:"updated_at"`
 }
 
 type ProductCategory struct {

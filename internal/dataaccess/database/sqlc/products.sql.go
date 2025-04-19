@@ -45,12 +45,12 @@ INSERT INTO products (
 `
 
 type CreateProductParams struct {
-	Name          string         `json:"name"`
-	Description   pgtype.Text    `json:"description"`
-	Price         pgtype.Numeric `json:"price"`
-	StockQuantity int32          `json:"stock_quantity"`
-	Status        string         `json:"status"`
-	ImageUrl      pgtype.Text    `json:"image_url"`
+	Name          string      `json:"name"`
+	Description   pgtype.Text `json:"description"`
+	Price         float64     `json:"price"`
+	StockQuantity int32       `json:"stock_quantity"`
+	Status        string      `json:"status"`
+	ImageUrl      pgtype.Text `json:"image_url"`
 }
 
 func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error) {
@@ -87,6 +87,16 @@ func (q *Queries) DeleteProduct(ctx context.Context, id int32) error {
 	return err
 }
 
+const deleteProductCategories = `-- name: DeleteProductCategories :exec
+DELETE FROM product_categories
+WHERE product_id = $1
+`
+
+func (q *Queries) DeleteProductCategories(ctx context.Context, productID int32) error {
+	_, err := q.db.Exec(ctx, deleteProductCategories, productID)
+	return err
+}
+
 const getProduct = `-- name: GetProduct :one
 SELECT p.id, p.name, p.description, p.price, p.stock_quantity, p.status, p.image_url, p.created_at, p.updated_at,
        COALESCE(
@@ -106,16 +116,16 @@ LIMIT 1
 `
 
 type GetProductRow struct {
-	ID            int32          `json:"id"`
-	Name          string         `json:"name"`
-	Description   pgtype.Text    `json:"description"`
-	Price         pgtype.Numeric `json:"price"`
-	StockQuantity int32          `json:"stock_quantity"`
-	Status        string         `json:"status"`
-	ImageUrl      pgtype.Text    `json:"image_url"`
-	CreatedAt     time.Time      `json:"created_at"`
-	UpdatedAt     time.Time      `json:"updated_at"`
-	Categories    interface{}    `json:"categories"`
+	ID            int32       `json:"id"`
+	Name          string      `json:"name"`
+	Description   pgtype.Text `json:"description"`
+	Price         float64     `json:"price"`
+	StockQuantity int32       `json:"stock_quantity"`
+	Status        string      `json:"status"`
+	ImageUrl      pgtype.Text `json:"image_url"`
+	CreatedAt     time.Time   `json:"created_at"`
+	UpdatedAt     time.Time   `json:"updated_at"`
+	Categories    interface{} `json:"categories"`
 }
 
 func (q *Queries) GetProduct(ctx context.Context, id int32) (GetProductRow, error) {
@@ -236,25 +246,26 @@ func (q *Queries) RemoveProductCategory(ctx context.Context, arg RemoveProductCa
 
 const updateProduct = `-- name: UpdateProduct :one
 UPDATE products
-SET name = $2,
-    description = $3,
-    price = $4,
-    stock_quantity = $5,
-    status = $6,
-    image_url = $7,
-    updated_at = now()
+SET
+  name = $2,
+  description = $3,
+  price = $4,
+  stock_quantity = $5,
+  status = $6,
+  image_url = $7,
+  updated_at = now()
 WHERE id = $1
 RETURNING id, name, description, price, stock_quantity, status, image_url, created_at, updated_at
 `
 
 type UpdateProductParams struct {
-	ID            int32          `json:"id"`
-	Name          string         `json:"name"`
-	Description   pgtype.Text    `json:"description"`
-	Price         pgtype.Numeric `json:"price"`
-	StockQuantity int32          `json:"stock_quantity"`
-	Status        string         `json:"status"`
-	ImageUrl      pgtype.Text    `json:"image_url"`
+	ID            int32       `json:"id"`
+	Name          string      `json:"name"`
+	Description   pgtype.Text `json:"description"`
+	Price         float64     `json:"price"`
+	StockQuantity int32       `json:"stock_quantity"`
+	Status        string      `json:"status"`
+	ImageUrl      pgtype.Text `json:"image_url"`
 }
 
 func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) (Product, error) {

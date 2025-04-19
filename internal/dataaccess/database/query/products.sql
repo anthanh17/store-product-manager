@@ -38,19 +38,24 @@ ORDER BY r.created_at DESC;
 
 -- name: UpdateProduct :one
 UPDATE products
-SET name = $2,
-    description = $3,
-    price = $4,
-    stock_quantity = $5,
-    status = $6,
-    image_url = $7,
-    updated_at = now()
+SET
+  name = $2,
+  description = $3,
+  price = $4,
+  stock_quantity = $5,
+  status = $6,
+  image_url = $7,
+  updated_at = now()
 WHERE id = $1
 RETURNING *;
 
 -- name: DeleteProduct :exec
 DELETE FROM products
 WHERE id = $1;
+
+-- name: DeleteProductCategories :exec
+DELETE FROM product_categories
+WHERE product_id = $1;
 
 -- name: GetProductCategories :many
 SELECT c.*
